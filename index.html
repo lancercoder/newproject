@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="project.css">
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
+</head>
+
+<body>
+<!-- VIDEO BACKGROUND -->
+<video autoplay muted loop playsinline class="video-background">
+  <source src="https://res.cloudinary.com/dgo3duohs/video/upload/v1777916060/113368-697718069_ez7kbh.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<div class="video-overlay"></div>
+
+<!-- REGISTER -->
+<div id="registerPage">
+  <div class="form-card">
+    <h2>Create Account</h2>
+    <p class="subtitle">Set up your portfolio dashboard</p>
+    <div class="input-group">
+      <label>Full Name</label>
+      <input id="name" placeholder="John Doe">
+    </div>
+    <div class="input-group">
+      <label>Email Address</label>
+      <input id="email" placeholder="john@example.com" type="email">
+    </div>
+    <div class="input-group">
+      <label>Job Title</label>
+      <input id="job" placeholder="e.g. Product Designer">
+    </div>
+    <button class="btn" onclick="register()" style="margin-top:8px;">Create Account</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="container" id="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">◆</div>
+      <div class="brand-text">Portfolio</div>
+    </div>
+
+    <div class="user-profile">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div class="user-info">
+        <h3 id="userName">—</h3>
+        <p id="userJob">—</p>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="#" class="active" id="nav-experience" onclick="switchPage('experience'); return false;"><span></span> Experience</a></li>
+      <li><a href="#" id="nav-settings" onclick="switchPage('settings'); return false;"><span></span> Settings</a></li>
+      <li class="share-link"><a href="#view" onclick="openPublicProfile(); return false;" target="_blank"><span>🌐</span> View Public Profile</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-secondary" onclick="showLogoutModal()" style="width:100%; margin-bottom:8px;"> Sign Out</button>
+      Portfolio Dashboard v1.0
+    </div>
+  </div>
+
+  <!-- EXPERIENCE PAGE -->
+  <div class="main-area" id="experiencePage">
+    <!-- LEFT: Add Experience -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <h2>Add Experience</h2>
+        <p>Fill in your work history details</p>
+      </div>
+
+      <div class="add-form">
+        <h3><span>➕</span> New Entry</h3>
+        <div class="input-group">
+          <label>Job Title</label>
+          <input id="title" placeholder="e.g. Senior Developer">
+        </div>
+        <div class="input-group">
+          <label>Company</label>
+          <input id="company" placeholder="e.g. Tech Corp">
+        </div>
+        <div class="input-group">
+          <label>Attachment (optional)</label>
+          <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx">
+        </div>
+        <button class="btn" onclick="addExperience()" style="margin-top:4px;">Add Experience</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Experience List -->
+    <div class="right-panel">
+      <div class="content-header">
+        <h1>Experience</h1>
+        <p>Manage your work history and projects</p>
+      </div>
+
+      <div class="section-header">
+        <h2>Experience List</h2>
+        <span class="badge" id="countBadge">0 items</span>
+      </div>
+
+      <div id="loading" class="skeleton-wrapper">
+        <div class="skeleton-card">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="list"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div class="settings-page" id="settingsPage">
+    <div class="content-header">
+      <h1>Settings</h1>
+      <p>Manage your account and preferences</p>
+    </div>
+
+    <div class="settings-layout">
+      <!-- Settings Navigation -->
+      <div class="settings-nav">
+        <button class="settings-nav-item active" onclick="switchSettingsTab('profile')">
+          <span></span> Profile
+        </button>
+        <button class="settings-nav-item" onclick="switchSettingsTab('security')">
+          <span></span> Security
+        </button>
+        <button class="settings-nav-item" onclick="switchSettingsTab('preferences')">
+          <span></span> Preferences
+        </button>
+        <button class="settings-nav-item" onclick="switchSettingsTab('danger')">
+          <span></span> Danger Zone
+        </button>
+      </div>
+
+      <!-- Settings Content -->
+      <div class="settings-content">
+
+        <!-- Profile Tab -->
+        <div class="settings-section active" id="tab-profile">
+          <div class="settings-card">
+            <h3>Public Profile</h3>
+            <p class="card-desc">This information will be displayed publicly</p>
+
+            <div class="profile-preview">
+              <div class="profile-preview-avatar" id="settingsAvatar">
+                <span id="settingsAvatarText">?</span>
+                <div class="avatar-overlay" onclick="document.getElementById('avatarInput').click()"><img src="c:\Users\joshua\Downloads\add_a_photo_outlined.svg" alt=""></div>
+              </div>
+              <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="updateAvatar(this)">
+              <div class="profile-preview-info">
+                <h4 id="settingsName">—</h4>
+                <p id="settingsEmail">—</p>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label>Display Name</label>
+              <input id="editName" placeholder="Your name">
+            </div>
+            <div class="input-group">
+              <label>Job Title</label>
+              <input id="editJob" placeholder="Your job title">
+            </div>
+            <div class="input-group">
+              <label>Bio</label>
+              <textarea id="editBio" placeholder="Tell us about yourself..."></textarea>
+            </div>
+            <div class="input-group">
+              <label>Location</label>
+              <input id="editLocation" placeholder="City, Country">
+            </div>
+            <div class="input-group">
+              <label>Website</label>
+              <input id="editWebsite" placeholder="https://yourwebsite.com">
+            </div>
+            <button class="btn btn-sm" onclick="saveProfile()" style="margin-top:8px;">Save Changes</button>
+          </div>
+
+          <div class="settings-card">
+            <h3>Contact Information</h3>
+            <p class="card-desc">How people can reach you</p>
+            <div class="input-group">
+              <label>Email Address</label>
+              <input id="editEmail" type="email" placeholder="your@email.com">
+            </div>
+            <div class="input-group">
+              <label>Phone Number</label>
+              <input id="editPhone" placeholder="+1 (555) 000-0000">
+            </div>
+            <button class="btn btn-sm" onclick="saveContact()" style="margin-top:8px;">Update Contact</button>
+          </div>
+        </div>
+
+        <!-- Security Tab -->
+        <div class="settings-section" id="tab-security">
+          <div class="settings-card">
+            <h3>Account Verification <span class="verification-badge unverified" id="verifyBadge">Unverified</span></h3>
+            <p class="card-desc">Verify your identity to unlock all features</p>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Email Verification</h4>
+                <p>Confirm your email address</p>
+              </div>
+              <button class="btn btn-sm btn-success" id="emailVerifyBtn" onclick="verifyEmail()">Verify</button>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Phone Verification</h4>
+                <p>Add and confirm your phone number</p>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="phoneVerifyBtn" onclick="verifyPhone()">Verify</button>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Two-Factor Authentication</h4>
+                <p>Add an extra layer of security</p>
+              </div>
+              <div class="toggle-switch" id="toggle2FA" onclick="toggle2FA()"></div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Change Password</h3>
+            <p class="card-desc">Update your password regularly for security</p>
+            <div class="input-group">
+              <label>Current Password</label>
+              <input type="password" id="currentPassword" placeholder="••••••••">
+            </div>
+            <div class="input-group">
+              <label>New Password</label>
+              <input type="password" id="newPassword" placeholder="Min 8 characters">
+            </div>
+            <div class="input-group">
+              <label>Confirm New Password</label>
+              <input type="password" id="confirmPassword" placeholder="Repeat new password">
+            </div>
+            <button class="btn btn-sm" onclick="changePassword()" style="margin-top:8px;">Update Password</button>
+          </div>
+
+          <div class="settings-card">
+            <h3>Active Sessions</h3>
+            <p class="card-desc">Manage devices logged into your account</p>
+            <div id="sessionsList">
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <h4>🖥️ Current Browser</h4>
+                  <p>Last active: Just now</p>
+                </div>
+                <span style="color:var(--success);font-size:13px;font-weight:500;">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferences Tab -->
+        <div class="settings-section" id="tab-preferences">
+          <div class="settings-card">
+            <h3>Appearance</h3>
+            <p class="card-desc">Customize how the dashboard looks</p>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Compact Mode</h4>
+                <p>Reduce spacing for denser layout</p>
+              </div>
+              <div class="toggle-switch" id="toggleCompact" onclick="toggleSetting('compact')"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Animations</h4>
+                <p>Enable hover and transition effects</p>
+              </div>
+              <div class="toggle-switch on" id="toggleAnim" onclick="toggleSetting('animations')"></div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Notifications</h3>
+            <p class="card-desc">Choose what you want to be notified about</p>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Experience Updates</h4>
+                <p>When items are added or removed</p>
+              </div>
+              <div class="toggle-switch on" id="toggleNotifExp" onclick="toggleSetting('notifExp')"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Security Alerts</h4>
+                <p>Login attempts and password changes</p>
+              </div>
+              <div class="toggle-switch on" id="toggleNotifSec" onclick="toggleSetting('notifSec')"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <h4>Marketing Emails</h4>
+                <p>Product updates and tips</p>
+              </div>
+              <div class="toggle-switch" id="toggleNotifMark" onclick="toggleSetting('notifMark')"></div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Language & Region</h3>
+            <p class="card-desc">Set your preferred language and timezone</p>
+            <div class="input-group">
+              <label>Language</label>
+              <select id="langSelect">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh">中文</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Timezone</label>
+              <select id="tzSelect">
+                <option value="UTC">UTC</option>
+                <option value="EST">Eastern Time (EST)</option>
+                <option value="CST">Central Time (CST)</option>
+                <option value="MST">Mountain Time (MST)</option>
+                <option value="PST">Pacific Time (PST)</option>
+                <option value="GMT">London (GMT)</option>
+                <option value="CET">Central Europe (CET)</option>
+              </select>
+            </div>
+            <button class="btn btn-sm" onclick="savePreferences()" style="margin-top:8px;">Save Preferences</button>
+          </div>
+        </div>
+
+        <!-- Danger Zone Tab -->
+        <div class="settings-section" id="tab-danger">
+          <div class="settings-card danger-zone">
+            <h3>⚠️ Delete Account</h3>
+            <p class="card-desc">Once deleted, your account and all data cannot be recovered</p>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">
+              This will permanently delete your profile, all experiences, and settings. This action cannot be undone.
+            </p>
+            <button class="btn btn-danger" onclick="showDeleteModal()">Delete My Account</button>
+          </div>
+
+          <div class="settings-card danger-zone">
+            <h3>🗑️ Clear All Data</h3>
+            <p class="card-desc">Remove all experiences while keeping your account</p>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">
+              This will delete all your work experiences but keep your profile and account intact.
+            </p>
+            <button class="btn btn-danger" onclick="clearAllData()">Clear All Experiences</button>
+          </div>
+
+          <div class="settings-card danger-zone">
+            <h3>📤 Export Data</h3>
+            <p class="card-desc">Download a copy of all your data</p>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">
+              Download your profile and experiences as a JSON file.
+            </p>
+            <button class="btn btn-secondary" onclick="exportData()">Export as JSON</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div class="modal-overlay" id="logoutModal">
+  <div class="modal">
+    <h3> Sign Out?</h3>
+    <p>Are you sure you want to sign out?.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="hideLogoutModal()">No</button>
+      <button class="btn btn-danger" onclick="confirmLogout()">Yes</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <h3>Delete Account?</h3>
+    <p>This action is permanent. All your data will be erased and cannot be recovered.</p>
+    <div class="input-group" style="margin-bottom:20px;">
+      <label>Type "DELETE" to confirm</label>
+      <input id="deleteConfirm" placeholder="DELETE">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="hideDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete Forever</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+
+<!-- PUBLIC PROFILE VIEW (read-only for third parties) -->
+<div class="public-profile-with-sidebar" id="publicProfilePage">
+
+  <!-- PUBLIC SIDEBAR -->
+  <div class="public-sidebar">
+    <div class="public-sidebar-brand">
+      <div class="brand-icon">◆</div>
+      <div class="brand-text">Portfolio</div>
+    </div>
+
+    <div class="public-sidebar-avatar" id="publicAvatar">?</div>
+    <div class="public-sidebar-name" id="publicName">—</div>
+    <div class="public-sidebar-job" id="publicJob">—</div>
+    <div class="public-sidebar-bio" id="publicBio"></div>
+
+    <div class="public-sidebar-info">
+      <div class="public-sidebar-info-item" id="publicLocationWrap" style="display:none;">
+        <span>📍</span> <span id="publicLocation"></span>
+      </div>
+      <div class="public-sidebar-info-item" id="publicWebsiteWrap" style="display:none;">
+        <span>🔗</span> <a id="publicWebsite" href="#" target="_blank">Website</a>
+      </div>
+      <div class="public-sidebar-info-item" id="publicEmailWrap" style="display:none;">
+        <span>✉️</span> <a id="publicEmail" href="mailto:">Email</a>
+      </div>
+      <div class="public-sidebar-info-item" id="publicPhoneWrap" style="display:none;">
+        <span>📞</span> <span id="publicPhone"></span>
+      </div>
+    </div>
+
+    <div class="public-sidebar-stats">
+      <div class="public-sidebar-stat">
+        <span class="public-sidebar-stat-label">Experiences</span>
+        <span class="public-sidebar-stat-value" id="publicExpCount">0</span>
+      </div>
+      <div class="public-sidebar-stat">
+        <span class="public-sidebar-stat-label">Member Since</span>
+        <span class="public-sidebar-stat-value" id="publicMemberSince">—</span>
+      </div>
+    </div>
+
+    <div class="public-sidebar-verified" id="publicVerifiedWrap" style="display:none;">
+      <span>✅ Verified Account</span>
+    </div>
+
+    <div class="public-sidebar-footer">
+      <p>Portfolio &copy; 2026</p>
+    </div>
+  </div>
+
+  <!-- PUBLIC MAIN CONTENT -->
+  <div class="public-main-content">
+    <div class="content-header">
+      <h1>Experience</h1>
+      <p>Work history and projects</p>
+    </div>
+    <div id="publicList"></div>
+  </div>
+</div>
+
+<!-- PUBLIC NOT FOUND -->
+<div class="public-not-found" id="publicNotFound">
+  <h2>😕</h2>
+  <h3 style="color:#fff;font-size:24px;margin-bottom:8px;">Profile Not Found</h3>
+  <p>This portfolio doesn't exist or has been removed.</p>
+  <button class="btn btn-sm" onclick="window.location.hash='';window.location.reload();" style="width:auto;">Go to Dashboard</button>
+</div>
+
+</body>
+<script src="project.js"></script>
+</html>
