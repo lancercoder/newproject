@@ -6,11 +6,8 @@
 <title>Portfolio Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="c:\Users\joshua\Downloads\background.mp4" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<base target="_blank">
-<base target="_blank">
 <base target="_blank">
 </head>
 
@@ -28,18 +25,22 @@
     <h2>Create Account</h2>
     <p class="subtitle">Set up your portfolio dashboard</p>
     <div class="input-group">
-      <label>Full Name</label>
-      <input id="name" placeholder="John Doe">
+      <label for="name">Full Name</label>
+      <input id="name" placeholder="John Doe" autocomplete="name">
     </div>
     <div class="input-group">
-      <label>Email Address</label>
-      <input id="email" placeholder="john@example.com" type="email">
+      <label for="email">Email Address</label>
+      <input id="email" placeholder="john@example.com" type="email" autocomplete="email">
     </div>
     <div class="input-group">
-      <label>Job Title</label>
-      <input id="job" placeholder="e.g. Product Designer">
+      <label for="job">Job Title</label>
+      <input id="job" placeholder="e.g. Product Designer" autocomplete="organization-title">
     </div>
-    <button class="btn" onclick="register()" style="margin-top:8px;">Create Account</button>
+    <div class="input-group">
+      <label for="regPassword">Password</label>
+      <input id="regPassword" placeholder="Min 8 characters" type="password" autocomplete="new-password">
+    </div>
+    <button type="button" class="btn" onclick="register()" style="margin-top:8px;">Create Account</button>
   </div>
 </div>
 
@@ -49,27 +50,27 @@
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon">◆</div>
+      <div class="brand-icon">&#9670;</div>
       <div class="brand-text">Portfolio</div>
     </div>
 
     <div class="user-profile">
       <div class="user-avatar" id="userAvatar">?</div>
       <div class="user-info">
-        <h3 id="userName">—</h3>
-        <p id="userJob">—</p>
+        <h3 id="userName">&#8212;</h3>
+        <p id="userJob">&#8212;</p>
       </div>
     </div>
 
     <ul class="sidebar-nav">
       <li><a href="#" class="active" id="nav-experience" onclick="switchPage('experience'); return false;"><span></span> Experience</a></li>
       <li><a href="#" id="nav-settings" onclick="switchPage('settings'); return false;"><span></span> Settings</a></li>
-      <li class="share-link"><a href="#view" onclick="openPublicProfile(); return false;" target="_blank"><span>🌐</span> View Public Profile</a></li>
+      <li class="share-link"><a href="#view" onclick="openPublicProfile(); return false;"><span>&#127760;</span> View Public Profile</a></li>
     </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-secondary" onclick="showLogoutModal()" style="width:100%; margin-bottom:8px;"> Sign Out</button>
-      Portfolio Dashboard v1.0
+      <button type="button" class="btn btn-secondary" onclick="showLogoutModal()" style="width:100%; margin-bottom:8px;">Sign Out</button>
+      Portfolio Dashboard v1.1
     </div>
   </div>
 
@@ -78,25 +79,44 @@
     <!-- LEFT: Add Experience -->
     <div class="left-panel">
       <div class="panel-header">
-        <h2>Add Experience</h2>
+        <h2 id="formTitle">Add Experience</h2>
         <p>Fill in your work history details</p>
       </div>
 
       <div class="add-form">
-        <h3><span>➕</span> New Entry</h3>
+        <h3><span>&#10133;</span> <span id="formSubtitle">New Entry</span></h3>
+        <input type="hidden" id="editIndex" value="">
         <div class="input-group">
-          <label>Job Title</label>
-          <input id="title" placeholder="e.g. Senior Developer">
+          <label for="title">Job Title *</label>
+          <input id="title" placeholder="e.g. Senior Developer" autocomplete="off">
+          <span class="field-error" id="titleError"></span>
         </div>
         <div class="input-group">
-          <label>Company</label>
-          <input id="company" placeholder="e.g. Tech Corp">
+          <label for="company">Company *</label>
+          <input id="company" placeholder="e.g. Tech Corp" autocomplete="off">
+          <span class="field-error" id="companyError"></span>
         </div>
         <div class="input-group">
-          <label>Attachment (optional)</label>
+          <label for="startDate">Start Date</label>
+          <input id="startDate" type="date">
+        </div>
+        <div class="input-group">
+          <label for="endDate">End Date</label>
+          <input id="endDate" type="date">
+        </div>
+        <div class="input-group checkbox-group">
+          <input type="checkbox" id="currentJob">
+          <label for="currentJob">I currently work here</label>
+        </div>
+        <div class="input-group">
+          <label for="fileInput">Attachment (optional)</label>
           <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx">
+          <span class="field-hint">Images, PDF, or Word docs. Max 2MB.</span>
         </div>
-        <button class="btn" onclick="addExperience()" style="margin-top:4px;">Add Experience</button>
+        <div class="form-actions">
+          <button type="button" class="btn" id="addBtn" onclick="addExperience()" style="margin-top:4px; flex:1;">Add Experience</button>
+          <button type="button" class="btn btn-secondary" id="cancelEditBtn" onclick="cancelEdit()" style="margin-top:4px; display:none;">Cancel</button>
+        </div>
       </div>
     </div>
 
@@ -150,16 +170,16 @@
     <div class="settings-layout">
       <!-- Settings Navigation -->
       <div class="settings-nav">
-        <button class="settings-nav-item active" onclick="switchSettingsTab('profile')">
+        <button type="button" class="settings-nav-item active" onclick="switchSettingsTab('profile', this)">
           <span></span> Profile
         </button>
-        <button class="settings-nav-item" onclick="switchSettingsTab('security')">
+        <button type="button" class="settings-nav-item" onclick="switchSettingsTab('security', this)">
           <span></span> Security
         </button>
-        <button class="settings-nav-item" onclick="switchSettingsTab('preferences')">
+        <button type="button" class="settings-nav-item" onclick="switchSettingsTab('preferences', this)">
           <span></span> Preferences
         </button>
-        <button class="settings-nav-item" onclick="switchSettingsTab('danger')">
+        <button type="button" class="settings-nav-item" onclick="switchSettingsTab('danger', this)">
           <span></span> Danger Zone
         </button>
       </div>
@@ -176,50 +196,53 @@
             <div class="profile-preview">
               <div class="profile-preview-avatar" id="settingsAvatar">
                 <span id="settingsAvatarText">?</span>
-                <div class="avatar-overlay" onclick="document.getElementById('avatarInput').click()"><img src="add_a_photo_outlined.png" alt=""></div>
+                <div class="avatar-overlay" onclick="document.getElementById('avatarInput').click()" role="button" tabindex="0" aria-label="Change avatar">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                </div>
               </div>
               <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="updateAvatar(this)">
               <div class="profile-preview-info">
-                <h4 id="settingsName">—</h4>
-                <p id="settingsEmail">—</p>
+                <h4 id="settingsName">&#8212;</h4>
+                <p id="settingsEmail">&#8212;</p>
               </div>
             </div>
 
             <div class="input-group">
-              <label>Display Name</label>
-              <input id="editName" placeholder="Your name">
+              <label for="editName">Display Name</label>
+              <input id="editName" placeholder="Your name" autocomplete="name">
             </div>
             <div class="input-group">
-              <label>Job Title</label>
-              <input id="editJob" placeholder="Your job title">
+              <label for="editJob">Job Title</label>
+              <input id="editJob" placeholder="Your job title" autocomplete="organization-title">
             </div>
             <div class="input-group">
-              <label>Bio</label>
+              <label for="editBio">Bio</label>
               <textarea id="editBio" placeholder="Tell us about yourself..."></textarea>
             </div>
             <div class="input-group">
-              <label>Location</label>
-              <input id="editLocation" placeholder="City, Country">
+              <label for="editLocation">Location</label>
+              <input id="editLocation" placeholder="City, Country" autocomplete="address-level2">
             </div>
             <div class="input-group">
-              <label>Website</label>
-              <input id="editWebsite" placeholder="https://yourwebsite.com">
+              <label for="editWebsite">Website</label>
+              <input id="editWebsite" placeholder="https://yourwebsite.com" type="url" autocomplete="url">
             </div>
-            <button class="btn btn-sm" onclick="saveProfile()" style="margin-top:8px;">Save Changes</button>
+            <button type="button" class="btn btn-sm" onclick="saveProfile()" style="margin-top:8px;">Save Changes</button>
           </div>
 
           <div class="settings-card">
             <h3>Contact Information</h3>
             <p class="card-desc">How people can reach you</p>
             <div class="input-group">
-              <label>Email Address</label>
-              <input id="editEmail" type="email" placeholder="your@email.com">
+              <label for="editEmail">Email Address</label>
+              <input id="editEmail" type="email" placeholder="your@email.com" autocomplete="email">
+              <span class="field-error" id="emailError"></span>
             </div>
             <div class="input-group">
-              <label>Phone Number</label>
-              <input id="editPhone" placeholder="+1 (555) 000-0000">
+              <label for="editPhone">Phone Number</label>
+              <input id="editPhone" placeholder="+1 (555) 000-0000" autocomplete="tel">
             </div>
-            <button class="btn btn-sm" onclick="saveContact()" style="margin-top:8px;">Update Contact</button>
+            <button type="button" class="btn btn-sm" onclick="saveContact()" style="margin-top:8px;">Update Contact</button>
           </div>
         </div>
 
@@ -234,7 +257,7 @@
                 <h4>Email Verification</h4>
                 <p>Confirm your email address</p>
               </div>
-              <button class="btn btn-sm btn-success" id="emailVerifyBtn" onclick="verifyEmail()">Verify</button>
+              <button type="button" class="btn btn-sm btn-success" id="emailVerifyBtn" onclick="verifyEmail()">Verify</button>
             </div>
 
             <div class="toggle-row">
@@ -242,7 +265,7 @@
                 <h4>Phone Verification</h4>
                 <p>Add and confirm your phone number</p>
               </div>
-              <button class="btn btn-sm btn-secondary" id="phoneVerifyBtn" onclick="verifyPhone()">Verify</button>
+              <button type="button" class="btn btn-sm btn-secondary" id="phoneVerifyBtn" onclick="verifyPhone()">Verify</button>
             </div>
 
             <div class="toggle-row">
@@ -250,7 +273,7 @@
                 <h4>Two-Factor Authentication</h4>
                 <p>Add an extra layer of security</p>
               </div>
-              <div class="toggle-switch" id="toggle2FA" onclick="toggle2FA()"></div>
+              <div class="toggle-switch" id="toggle2FA" onclick="toggle2FA()" role="switch" aria-checked="false" tabindex="0"></div>
             </div>
           </div>
 
@@ -258,18 +281,19 @@
             <h3>Change Password</h3>
             <p class="card-desc">Update your password regularly for security</p>
             <div class="input-group">
-              <label>Current Password</label>
-              <input type="password" id="currentPassword" placeholder="••••••••">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password">
             </div>
             <div class="input-group">
-              <label>New Password</label>
-              <input type="password" id="newPassword" placeholder="Min 8 characters">
+              <label for="newPassword">New Password</label>
+              <input type="password" id="newPassword" placeholder="Min 8 characters" autocomplete="new-password">
             </div>
             <div class="input-group">
-              <label>Confirm New Password</label>
-              <input type="password" id="confirmPassword" placeholder="Repeat new password">
+              <label for="confirmPassword">Confirm New Password</label>
+              <input type="password" id="confirmPassword" placeholder="Repeat new password" autocomplete="new-password">
+              <span class="field-error" id="passwordError"></span>
             </div>
-            <button class="btn btn-sm" onclick="changePassword()" style="margin-top:8px;">Update Password</button>
+            <button type="button" class="btn btn-sm" onclick="changePassword()" style="margin-top:8px;">Update Password</button>
           </div>
 
           <div class="settings-card">
@@ -278,7 +302,7 @@
             <div id="sessionsList">
               <div class="toggle-row">
                 <div class="toggle-info">
-                  <h4>🖥️ Current Browser</h4>
+                  <h4>&#128187; Current Browser</h4>
                   <p>Last active: Just now</p>
                 </div>
                 <span style="color:var(--success);font-size:13px;font-weight:500;">Active</span>
@@ -298,7 +322,7 @@
                 <h4>Compact Mode</h4>
                 <p>Reduce spacing for denser layout</p>
               </div>
-              <div class="toggle-switch" id="toggleCompact" onclick="toggleSetting('compact')"></div>
+              <div class="toggle-switch" id="toggleCompact" onclick="toggleSetting('compact')" role="switch" aria-checked="false" tabindex="0"></div>
             </div>
 
             <div class="toggle-row">
@@ -306,7 +330,7 @@
                 <h4>Animations</h4>
                 <p>Enable hover and transition effects</p>
               </div>
-              <div class="toggle-switch on" id="toggleAnim" onclick="toggleSetting('animations')"></div>
+              <div class="toggle-switch on" id="toggleAnim" onclick="toggleSetting('animations')" role="switch" aria-checked="true" tabindex="0"></div>
             </div>
           </div>
 
@@ -319,7 +343,7 @@
                 <h4>Experience Updates</h4>
                 <p>When items are added or removed</p>
               </div>
-              <div class="toggle-switch on" id="toggleNotifExp" onclick="toggleSetting('notifExp')"></div>
+              <div class="toggle-switch on" id="toggleNotifExp" onclick="toggleSetting('notifExp')" role="switch" aria-checked="true" tabindex="0"></div>
             </div>
 
             <div class="toggle-row">
@@ -327,7 +351,7 @@
                 <h4>Security Alerts</h4>
                 <p>Login attempts and password changes</p>
               </div>
-              <div class="toggle-switch on" id="toggleNotifSec" onclick="toggleSetting('notifSec')"></div>
+              <div class="toggle-switch on" id="toggleNotifSec" onclick="toggleSetting('notifSec')" role="switch" aria-checked="true" tabindex="0"></div>
             </div>
 
             <div class="toggle-row">
@@ -335,25 +359,25 @@
                 <h4>Marketing Emails</h4>
                 <p>Product updates and tips</p>
               </div>
-              <div class="toggle-switch" id="toggleNotifMark" onclick="toggleSetting('notifMark')"></div>
+              <div class="toggle-switch" id="toggleNotifMark" onclick="toggleSetting('notifMark')" role="switch" aria-checked="false" tabindex="0"></div>
             </div>
           </div>
 
           <div class="settings-card">
-            <h3>Language & Region</h3>
+            <h3>Language &amp; Region</h3>
             <p class="card-desc">Set your preferred language and timezone</p>
             <div class="input-group">
-              <label>Language</label>
+              <label for="langSelect">Language</label>
               <select id="langSelect">
                 <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
+                <option value="es">Espa&#241;ol</option>
+                <option value="fr">Fran&#231;ais</option>
                 <option value="de">Deutsch</option>
-                <option value="zh">中文</option>
+                <option value="zh">&#20013;&#25991;</option>
               </select>
             </div>
             <div class="input-group">
-              <label>Timezone</label>
+              <label for="tzSelect">Timezone</label>
               <select id="tzSelect">
                 <option value="UTC">UTC</option>
                 <option value="EST">Eastern Time (EST)</option>
@@ -364,37 +388,37 @@
                 <option value="CET">Central Europe (CET)</option>
               </select>
             </div>
-            <button class="btn btn-sm" onclick="savePreferences()" style="margin-top:8px;">Save Preferences</button>
+            <button type="button" class="btn btn-sm" onclick="savePreferences()" style="margin-top:8px;">Save Preferences</button>
           </div>
         </div>
 
         <!-- Danger Zone Tab -->
         <div class="settings-section" id="tab-danger">
           <div class="settings-card danger-zone">
-            <h3>⚠️ Delete Account</h3>
+            <h3>&#9888; Delete Account</h3>
             <p class="card-desc">Once deleted, your account and all data cannot be recovered</p>
             <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">
               This will permanently delete your profile, all experiences, and settings. This action cannot be undone.
             </p>
-            <button class="btn btn-danger" onclick="showDeleteModal()">Delete My Account</button>
+            <button type="button" class="btn btn-danger" onclick="showDeleteModal()">Delete My Account</button>
           </div>
 
           <div class="settings-card danger-zone">
-            <h3>🗑️ Clear All Data</h3>
+            <h3>&#128465; Clear All Data</h3>
             <p class="card-desc">Remove all experiences while keeping your account</p>
             <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">
               This will delete all your work experiences but keep your profile and account intact.
             </p>
-            <button class="btn btn-danger" onclick="clearAllData()">Clear All Experiences</button>
+            <button type="button" class="btn btn-danger" onclick="showClearModal()">Clear All Experiences</button>
           </div>
 
           <div class="settings-card danger-zone">
-            <h3>📤 Export Data</h3>
+            <h3>&#128228; Export Data</h3>
             <p class="card-desc">Download a copy of all your data</p>
             <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">
               Download your profile and experiences as a JSON file.
             </p>
-            <button class="btn btn-secondary" onclick="exportData()">Export as JSON</button>
+            <button type="button" class="btn btn-secondary" onclick="exportData()">Export as JSON</button>
           </div>
         </div>
 
@@ -405,29 +429,41 @@
 </div>
 
 <!-- LOGOUT CONFIRMATION MODAL -->
-<div class="modal-overlay" id="logoutModal">
+<div class="modal-overlay" id="logoutModal" onclick="if(event.target===this)hideLogoutModal()">
   <div class="modal">
-    <h3> Sign Out?</h3>
-    <p>Are you sure you want to sign out?.</p>
+    <h3>Sign Out?</h3>
+    <p>Are you sure you want to sign out? Your data will remain safe.</p>
     <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="hideLogoutModal()">No</button>
-      <button class="btn btn-danger" onclick="confirmLogout()">Yes</button>
+      <button type="button" class="btn btn-secondary" onclick="hideLogoutModal()">Stay</button>
+      <button type="button" class="btn btn-danger" onclick="confirmLogout()">Sign Out</button>
     </div>
   </div>
 </div>
 
 <!-- DELETE ACCOUNT MODAL -->
-<div class="modal-overlay" id="deleteModal">
+<div class="modal-overlay" id="deleteModal" onclick="if(event.target===this)hideDeleteModal()">
   <div class="modal">
     <h3>Delete Account?</h3>
     <p>This action is permanent. All your data will be erased and cannot be recovered.</p>
     <div class="input-group" style="margin-bottom:20px;">
-      <label>Type "DELETE" to confirm</label>
-      <input id="deleteConfirm" placeholder="DELETE">
+      <label for="deleteConfirm">Type "DELETE" to confirm</label>
+      <input id="deleteConfirm" placeholder="DELETE" autocomplete="off">
     </div>
     <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="hideDeleteModal()">Cancel</button>
-      <button class="btn btn-danger" onclick="confirmDelete()">Delete Forever</button>
+      <button type="button" class="btn btn-secondary" onclick="hideDeleteModal()">Cancel</button>
+      <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Forever</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLEAR DATA MODAL -->
+<div class="modal-overlay" id="clearModal" onclick="if(event.target===this)hideClearModal()">
+  <div class="modal">
+    <h3>Clear All Experiences?</h3>
+    <p>This will remove all your work history. Your profile will remain intact.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="hideClearModal()">Cancel</button>
+      <button type="button" class="btn btn-danger" onclick="confirmClear()">Clear All</button>
     </div>
   </div>
 </div>
@@ -435,34 +471,33 @@
 <!-- TOAST -->
 <div id="toast" class="toast"></div>
 
-
-<!-- PUBLIC PROFILE VIEW (read-only for third parties) -->
+<!-- PUBLIC PROFILE VIEW -->
 <div class="public-profile-with-sidebar" id="publicProfilePage">
 
   <!-- PUBLIC SIDEBAR -->
   <div class="public-sidebar">
     <div class="public-sidebar-brand">
-      <div class="brand-icon">◆</div>
+      <div class="brand-icon">&#9670;</div>
       <div class="brand-text">Portfolio</div>
     </div>
 
     <div class="public-sidebar-avatar" id="publicAvatar">?</div>
-    <div class="public-sidebar-name" id="publicName">—</div>
-    <div class="public-sidebar-job" id="publicJob">—</div>
+    <div class="public-sidebar-name" id="publicName">&#8212;</div>
+    <div class="public-sidebar-job" id="publicJob">&#8212;</div>
     <div class="public-sidebar-bio" id="publicBio"></div>
 
     <div class="public-sidebar-info">
       <div class="public-sidebar-info-item" id="publicLocationWrap" style="display:none;">
-        <span>📍</span> <span id="publicLocation"></span>
+        <span>&#128205;</span> <span id="publicLocation"></span>
       </div>
       <div class="public-sidebar-info-item" id="publicWebsiteWrap" style="display:none;">
-        <span>🔗</span> <a id="publicWebsite" href="#" target="_blank">Website</a>
+        <span>&#128279;</span> <a id="publicWebsite" href="#" target="_blank" rel="noopener">Website</a>
       </div>
       <div class="public-sidebar-info-item" id="publicEmailWrap" style="display:none;">
-        <span>✉️</span> <a id="publicEmail" href="mailto:">Email</a>
+        <span>&#9993;</span> <a id="publicEmail" href="mailto:">Email</a>
       </div>
       <div class="public-sidebar-info-item" id="publicPhoneWrap" style="display:none;">
-        <span>📞</span> <span id="publicPhone"></span>
+        <span>&#128222;</span> <span id="publicPhone"></span>
       </div>
     </div>
 
@@ -473,12 +508,12 @@
       </div>
       <div class="public-sidebar-stat">
         <span class="public-sidebar-stat-label">Member Since</span>
-        <span class="public-sidebar-stat-value" id="publicMemberSince">—</span>
+        <span class="public-sidebar-stat-value" id="publicMemberSince">&#8212;</span>
       </div>
     </div>
 
     <div class="public-sidebar-verified" id="publicVerifiedWrap" style="display:none;">
-      <span>✅ Verified Account</span>
+      <span>&#9989; Verified Account</span>
     </div>
 
     <div class="public-sidebar-footer">
@@ -498,10 +533,10 @@
 
 <!-- PUBLIC NOT FOUND -->
 <div class="public-not-found" id="publicNotFound">
-  <h2>😕</h2>
+  <h2>&#128533;</h2>
   <h3 style="color:#fff;font-size:24px;margin-bottom:8px;">Profile Not Found</h3>
   <p>This portfolio doesn't exist or has been removed.</p>
-  <button class="btn btn-sm" onclick="window.location.hash='';window.location.reload();" style="width:auto;">Go to Dashboard</button>
+  <button type="button" class="btn btn-sm" onclick="window.location.hash='';window.location.reload();" style="width:auto;">Go to Dashboard</button>
 </div>
 
 </body>
