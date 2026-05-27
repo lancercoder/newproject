@@ -77,13 +77,32 @@ function register() {
   showToast("Account created successfully!", "success");
 }
 
+function updateAvatarDisplay(user) {
+  // Sidebar avatar
+  if (user.avatar) {
+    userAvatar.innerHTML = `<img src="${user.avatar}" alt="avatar">`;
+  } else {
+    userAvatar.innerText = user.name.charAt(0).toUpperCase();
+  }
+
+  // Settings avatar
+  let avatarText = document.getElementById('settingsAvatarText');
+  if (avatarText) {
+    if (user.avatar) {
+      avatarText.innerHTML = `<img src="${user.avatar}" alt="avatar">`;
+    } else {
+      avatarText.innerText = user.name.charAt(0).toUpperCase();
+    }
+  }
+}
+
 function showApp(user) {
   registerPage.style.display = "none";
   app.style.display = "block";
 
   userName.innerText = user.name;
   userJob.innerText = user.job;
-  userAvatar.innerText = user.name.charAt(0).toUpperCase();
+  updateAvatarDisplay(user);
 
   loadData();
 }
@@ -94,7 +113,7 @@ function loadSettingsData() {
 
   document.getElementById('settingsName').innerText = user.name || '—';
   document.getElementById('settingsEmail').innerText = user.email || '—';
-  document.getElementById('settingsAvatarText').innerText = (user.name || '?').charAt(0).toUpperCase();
+  updateAvatarDisplay(user);
 
   document.getElementById('editName').value = user.name || '';
   document.getElementById('editJob').value = user.job || '';
@@ -133,7 +152,7 @@ function saveProfile() {
 
   userName.innerText = user.name;
   userJob.innerText = user.job;
-  userAvatar.innerText = user.name.charAt(0).toUpperCase();
+  updateAvatarDisplay(user);
 
   loadSettingsData();
   showToast("Profile updated successfully!", "success");
@@ -164,7 +183,7 @@ function updateAvatar(input) {
     let user = JSON.parse(localStorage.getItem("user")) || {};
     user.avatar = reader.result;
     localStorage.setItem("user", JSON.stringify(user));
-    document.getElementById('settingsAvatarText').innerHTML = `<img src="${reader.result}">`;
+    updateAvatarDisplay(user);
     showToast("Avatar updated!", "success");
   };
   reader.readAsDataURL(file);
