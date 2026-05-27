@@ -1,4 +1,3 @@
-
 const app = document.getElementById("app");
 const registerPage = document.getElementById("registerPage");
 const experiencePage = document.getElementById("experiencePage");
@@ -52,6 +51,11 @@ function initApp() {
   }
 }
 
+/* ─── EMAIL VALIDATION ─── */
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 function register() {
   let name = document.getElementById("name").value.trim();
   let email = document.getElementById("email").value.trim();
@@ -59,6 +63,11 @@ function register() {
 
   if (!name || !email || !job) {
     showToast("Please fill in all fields", "error");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    showToast("Please enter a valid email address", "error");
     return;
   }
 
@@ -132,8 +141,16 @@ function saveProfile() {
 
 function saveContact() {
   let user = JSON.parse(localStorage.getItem("user")) || {};
-  user.email = document.getElementById('editEmail').value.trim();
-  user.phone = document.getElementById('editPhone').value.trim();
+  let email = document.getElementById('editEmail').value.trim();
+  let phone = document.getElementById('editPhone').value.trim();
+
+  if (email && !isValidEmail(email)) {
+    showToast("Please enter a valid email address", "error");
+    return;
+  }
+
+  user.email = email;
+  user.phone = phone;
   localStorage.setItem("user", JSON.stringify(user));
   loadSettingsData();
   showToast("Contact information updated!", "success");
